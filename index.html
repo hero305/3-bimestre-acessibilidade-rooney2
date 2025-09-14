@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>Tropicália</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #2EC4B6;
+            --dark-color: #1A1A2E;
+            --light-color: #F8F9FA;
+            --accent-color: #E71D36;
+            --font-size: 16px;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-size: var(--font-size);
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        /* Acessibilidade */
+        .accessibility-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-accessibility {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-accessibility:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .accessibility-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            width: 200px;
+            z-index: 1000;
+        }
+
+        .accessibility-options.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .accessibility-btn {
+            background: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 15px;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .accessibility-btn:hover {
+            background: #e9ecef;
+        }
+
+        .accessibility-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Player de áudio */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 10px 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .audio-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .audio-btn.stop {
+            background: var(--accent-color);
+        }
+
+        .audio-progress {
+            width: 200px;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .audio-progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .audio-text-highlight {
+            background-color: rgba(255, 107, 53, 0.3);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Tamanhos de fonte */
+        body.small-font {
+            --font-size: 14px;
+        }
+
+        body.large-font {
+            --font-size: 18px;
+        }
+
+        body.xlarge-font {
+            --font-size: 20px;
+        }
+
+        /* Header e Navegação */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-img {
+            height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+            padding: 10px 20px !important;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Seção Início */
+        .inicio-fundo {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 60px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+
+        .botao-inicio {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .botao-inicio:hover {
+            background-color: #ff2e4d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .img-inicio {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .img-inicio:hover {
+            transform: scale(1.03);
+        }
+
+        /* Seção Tropicália */
+        .secao-tropicalia {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+        }
+
+        .secao-tropicalia h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 15px;
+        }
+
+        .secao-tropicalia img {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .secao-tropicalia img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Galeria */
+        .fundo-galeria {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #galeria h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #galeria img {
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #galeria img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Formulário */
+        .formulario {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 40px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .formulario h2 {
+            color: white;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .form-control {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.3);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff2e4d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+
+        footer i {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        footer i:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .inicio-fundo {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .esquerda-conteudo {
+                margin-bottom: 30px;
+            }
+            
+            .secao-tropicalia .container {
+                flex-direction: column;
+            }
+            
+            .secao-tropicalia .col-4, .secao-tropicalia .col-5 {
+                width: 100% !important;
+                max-width: 100%;
+            }
+            
+            .secao-tropicalia img {
+                margin-bottom: 30px;
+            }
+            
+            .audio-player {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                border-radius: 10px;
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .audio-progress {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+            }
+            
+            .accessibility-container {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="p-3 p-md-4 p-lg-5">
+        <nav class="container d-flex flex-wrap justify-content-between align-items-center">
+            <img src="https://via.placeholder.com/180x80/FF6B35/FFFFFF?text=Tropicália" class="nav-img" alt="Logo Tropicália" loading="lazy">
+            
+            <ul class="nav mt-3 mt-md-0">
+                <li class="nav-item"><a class="nav-link" href="#inicio">Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tropicalia">Tropicália</a></li>
+                <li class="nav-item"><a class="nav-link" href="#galeria">Galeria</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+            </ul>
+
+            <div class="accessibility-container mt-3 mt-md-0">
+                <button id="botao-acessibilidade" class="btn-accessibility">
+                    <i class="fas fa-universal-access"></i> Acessibilidade
+                </button>
+                <div id="opcoes-acessibilidade" class="accessibility-options">
+                    <button id="aumentar-fonte" class="accessibility-btn">
+                        <i class="fas fa-text-height"></i> Aumentar Fonte
+                    </button>
+                    <button id="diminuir-fonte" class="accessibility-btn">
+                        <i class="fas fa-text-width"></i> Diminuir Fonte
+                    </button>
+                    <button id="alto-contraste" class="accessibility-btn">
+                        <i class="fas fa-adjust"></i> Alto Contraste
+                    </button>
+                    <button id="ler-conteudo" class="accessibility-btn">
+                        <i class="fas fa-volume-up"></i> Ler Conteúdo
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <section id="inicio" class="my-5">
+            <div class="inicio-fundo d-flex justify-content-between align-items-center flex-wrap">
+                <div class="esquerda-conteudo">
+                    <h1 class="display-4 text-white fst-italic fw-bold">Boas-vindas a</h1>
+                    <img src="https://via.placeholder.com/563x278/FFFFFF/FF6B35?text=Tropicália" class="mb-3 img-fluid" alt="Logo Tropicália" loading="lazy">
+                    <a href="#tropicalia" class="btn btn-primary btn-lg botao-inicio fw-semibold">Quero conhecer!</a>
+                </div>
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Show de música ao vivo" class="img-fluid img-inicio">
+            </div>
+        </section>
+
+        <section id="tropicalia" class="my-5 pt-5 secao-tropicalia">
+            <div class="container d-flex align-items-center flex-wrap">
+                <div class="col-12 col-md-4 d-flex justify-content-center mb-4 mb-md-0">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="rounded-pill img-fluid" alt="Show de música tropicalista" width="273" height="331" loading="lazy">
+                </div>
+                <div class="col-12 col-md-8">
+                    <h2>O que foi a Tropicália?</h2>
+                    <p class="p-3">A Tropicália, também conhecida como Tropicalismo, foi um movimento cultural brasileiro que surgiu na década de 1960, tendo seu auge entre 1967 e 1968. Esse movimento abrangeu várias expressões artísticas, como a música, o cinema, o teatro e as artes plásticas, e teve como principal característica a mistura de elementos da cultura brasileira tradicional com influências estrangeiras, especialmente do rock e da música pop. Fonte: Site Toda a matéria</p>
+                    <p class="p-3">Artistas como Caetano Veloso, Gilberto Gil, Gal Costa, Tom Zé, Os Mutantes e Torquato Neto foram alguns dos principais representantes deste movimento que revolucionou a cultura brasileira.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="galeria" class="my-5">
+            <h2 class="text-center pt-5">Galeria</h2>
+            <div class="container p-3 mt-3 fundo-galeria">
+                <div class="row justify-content-center">
+                    <div class="col-md-5 mb-4">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded-5" alt="Show musical" loading="lazy">
+                    </div>
+                    <div class="col-md-5 mb-4">
+                        <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded-5" alt="Banda tocando" loading="lazy">
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-5 mb-4">
+                        <img src="https://images.unsplash.com/photo-1511735111819-9a3f7709049c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded-5" alt="Cantores em show" loading="lazy">
+                    </div>
+                    <div class="col-md-5 mb-4">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded-5" alt="Público em show" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="my-5">
+            <div class="container p-3 p-md-5 d-flex justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 rounded-5 formulario">
+                    <h2 class="mb-4 text-center">Entre em contato</h2>
+                    <form>
+                        <div class="form-group mb-3">
+                            <label for="nome">Nome</label>
+                            <input type="text" id="nome" name="nome" class="form-control rounded-3 mt-1" placeholder="Digite seu nome completo">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control rounded-3 mt-1" placeholder="Digite seu email">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="mensagem">Mensagem</label>
+                            <textarea id="mensagem" name="mensagem" class="form-control rounded-4 mt-2" rows="4" placeholder="Escreva sua mensagem"></textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill">Enviar mensagem</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Player de Áudio -->
+    <div id="audio-player" class="audio-player" style="display: none;">
+        <div class="audio-controls">
+            <button id="play-btn" class="audio-btn">
+                <i class="fas fa-play"></i>
+            </button>
+            <button id="pause-btn" class="audio-btn" style="display: none;">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button id="stop-btn" class="audio-btn stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        <div class="audio-progress">
+            <div id="progress-bar" class="audio-progress-bar"></div>
+        </div>
+        <div id="audio-status">Parado</div>
+    </div>
+    
+    <footer class="text-center p-4">
+        <p>Acesse nossas redes:</p>
+        <div class="my-2">
+            <i class="fab fa-whatsapp"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-tiktok"></i>
+            <i class="fab fa-youtube"></i>
+        </div>
+        <p class="mt-3">Desenvolvido por Start by Alura. Projeto fictício sem fins comerciais.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Controles de acessibilidade
+            const botaoAcessibilidade = document.getElementById('botao-acessibilidade');
+            const opcoesAcessibilidade = document.getElementById('opcoes-acessibilidade');
+            const aumentarFonteBtn = document.getElementById('aumentar-fonte');
+            const diminuirFonteBtn = document.getElementById('diminuir-fonte');
+            const altoContrasteBtn = document.getElementById('alto-contraste');
+            const lerConteudoBtn = document.getElementById('ler-conteudo');
+            
+            // Elementos do player de áudio
+            const audioPlayer = document.getElementById('audio-player');
+            const playBtn = document.getElementById('play-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const audioStatus = document.getElementById('audio-status');
+            
+            // Variáveis para controle de áudio
+            let synth = window.speechSynthesis;
+            let utterance = null;
+            let isPlaying = false;
+            let currentTextIndex = 0;
+            let textElements = [];
+            
+            // Textos para leitura (coletados das seções da página)
+            function coletarTextosParaLeitura() {
+                const secoes = document.querySelectorAll('h1, h2, p:not(footer p)');
+                textElements = Array.from(secoes).filter(el => el.textContent.trim().length > 0);
+                
+                // Adicionar evento de clique para ler texto específico
+                textElements.forEach(el => {
+                    el.style.cursor = 'pointer';
+                    el.title = 'Clique para ouvir este texto';
+                    el.addEventListener('click', () => {
+                        lerTextoEspecifico(el);
+                    });
+                });
+            }
+            
+            // Iniciar a leitura do conteúdo
+            function iniciarLeitura() {
+                if (isPlaying) {
+                    pausarLeitura();
+                    return;
+                }
+                
+                if (synth.speaking) {
+                    synth.cancel();
+                }
+                
+                coletarTextosParaLeitura();
+                currentTextIndex = 0;
+                audioPlayer.style.display = 'flex';
+                lerProximoTexto();
+            }
+            
+            // Ler texto específico
+            function lerTextoEspecifico(elemento) {
+                if (synth.speaking) {
+                    synth.cancel();
+                }
+                
+                const texto = elemento.textContent;
+                utterance = new SpeechSynthesisUtterance(texto);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.0;
+                
+                // Destacar texto durante a leitura
+                utterance.onstart = function() {
+                    elemento.classList.add('audio-text-highlight');
+                    isPlaying = true;
+                    playBtn.style.display = 'none';
+                    pauseBtn.style.display = 'flex';
+                    audioStatus.textContent = 'Ouvindo: ' + elemento.tagName;
+                };
+                
+                utterance.onend = function() {
+                    elemento.classList.remove('audio-text-highlight');
+                    isPlaying = false;
+                    playBtn.style.display = 'flex';
+                    pauseBtn.style.display = 'none';
+                    audioStatus.textContent = 'Parado';
+                };
+                
+                synth.speak(utterance);
+            }
+            
+            // Ler próximo texto na sequência
+            function lerProximoTexto() {
+                if (currentTextIndex >= textElements.length) {
+                    audioStatus.textContent = 'Leitura concluída';
+                    isPlaying = false;
+                    playBtn.style.display = 'flex';
+                    pauseBtn.style.display = 'none';
+                    return;
+                }
+                
+                const elemento = textElements[currentTextIndex];
+                const texto = elemento.textContent;
+                
+                utterance = new SpeechSynthesisUtterance(texto);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.0;
+                
+                // Atualizar barra de progresso
+                utterance.onstart = function() {
+                    elemento.classList.add('audio-text-highlight');
+                    isPlaying = true;
+                    playBtn.style.display = 'none';
+                    pauseBtn.style.display = 'flex';
+                    audioStatus.textContent = `Ouvindo (${currentTextIndex + 1}/${textElements.length})`;
+                    
+                    // Atualizar barra de progresso
+                    const progress = ((currentTextIndex + 1) / textElements.length) * 100;
+                    progressBar.style.width = progress + '%';
+                };
+                
+                utterance.onend = function() {
+                    elemento.classList.remove('audio-text-highlight');
+                    currentTextIndex++;
+                    if (currentTextIndex < textElements.length) {
+                        lerProximoTexto();
+                    } else {
+                        isPlaying = false;
+                        playBtn.style.display = 'flex';
+                        pauseBtn.style.display = 'none';
+                        audioStatus.textContent = 'Leitura concluída';
+                    }
+                };
+                
+                utterance.onerror = function(event) {
+                    console.error('Erro na síntese de fala:', event);
+                    audioStatus.textContent = 'Erro na leitura';
+                };
+                
+                synth.speak(utterance);
+            }
+            
+            // Pausar leitura
+            function pausarLeitura() {
+                if (synth.speaking && !synth.paused) {
+                    synth.pause();
+                    isPlaying = false;
+                    playBtn.style.display = 'flex';
+                    pauseBtn.style.display = 'none';
+                    audioStatus.textContent = 'Pausado';
+                }
+            }
+            
+            // Continuar leitura
+            function continuarLeitura() {
+                if (synth.speaking && synth.paused) {
+                    synth.resume();
+                    isPlaying = true;
+                    playBtn.style.display = 'none';
+                    pauseBtn.style.display = 'flex';
+                    audioStatus.textContent = 'Ouvindo';
+                }
+            }
+            
+            // Parar leitura
+            function pararLeitura() {
+                if (synth.speaking) {
+                    synth.cancel();
+                    isPlaying = false;
+                    playBtn.style.display = 'flex';
+                    pauseBtn.style.display = 'none';
+                    audioStatus.textContent = 'Parado';
+                    progressBar.style.width = '0%';
+                    
+                    // Remover destaque de todos os textos
+                    textElements.forEach(el => {
+                        el.classList.remove('audio-text-highlight');
+                    });
+                }
+            }
+            
+            // Event listeners para os botões do player
+            playBtn.addEventListener('click', continuarLeitura);
+            pauseBtn.addEventListener('click', pausarLeitura);
+            stopBtn.addEventListener('click', pararLeitura);
+            
+            // Event listener para o botão de ler conteúdo
+            lerConteudoBtn.addEventListener('click', function() {
+                opcoesAcessibilidade.classList.remove('active');
+                iniciarLeitura();
+            });
+            
+            // Alternar a exibição das opções de acessibilidade
+            botaoAcessibilidade.addEventListener('click', function(e) {
+                e.stopPropagation();
+                opcoesAcessibilidade.classList.toggle('active');
+            });
+            
+            // Fechar o menu ao clicar fora dele
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.accessibility-container')) {
+                    opcoesAcessibilidade.classList.remove('active');
+                }
+            });
+            
+            // Aumentar fonte
+            aumentarFonteBtn.addEventListener('click', function() {
+                if (document.body.classList.contains('small-font')) {
+                    document.body.classList.remove('small-font');
+                    document.body.classList.add('large-font');
+                } else if (document.body.classList.contains('large-font')) {
+                    document.body.classList.remove('large-font');
+                    document.body.classList.add('xlarge-font');
+                } else if (document.body.classList.contains('xlarge-font')) {
+                    // Já está no máximo
+                } else {
+                    document.body.classList.add('large-font');
+                }
+                opcoesAcessibilidade.classList.remove('active');
+            });
+            
+            // Diminuir fonte
+            diminuirFonteBtn.addEventListener('click', function() {
+                if (document.body.classList.contains('xlarge-font')) {
+                    document.body.classList.remove('xlarge-font');
+                    document.body.classList.add('large-font');
+                } else if (document.body.classList.contains('large-font')) {
+                    document.body.classList.remove('large-font');
+                    document.body.classList.add('small-font');
+                } else if (document.body.classList.contains('small-font')) {
+                    document.body.classList.remove('small-font');
+                } else {
+                    document.body.classList.add('small-font');
+                }
+                opcoesAcessibilidade.classList.remove('active');
+            });
+            
+            // Alternar alto contraste
+            altoContrasteBtn.addEventListener('click', function() {
+                document.body.classList.toggle('alto-contraste');
+                opcoesAcessibilidade.classList.remove('active');
+            });
+            
+            // Suavizar rolagem para âncoras
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Coletar textos quando a página carregar
+            coletarTextosParaLeitura();
+        });
+    </script>
+</body>
+
+</html>
